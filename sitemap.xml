@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://trooploop.ca/</loc>
+    </url>
+    <url>
+        <loc>https://trooploop.ca/about/</loc>
+    </url>
+    <url>
+        <loc>https://trooploop.ca/notes/</loc>
+    </url>
+    <url>
+        <loc>https://trooploop.ca/notes/csharp-rest-api-intro-part-one/</loc>
+        <lastmod>2020-11-04</lastmod>
+    </url>
+    <url>
+        <loc>https://trooploop.ca/notes/troubleshooting-virtualbox/</loc>
+        <lastmod>2019-08-24</lastmod>
+    </url>
+</urlset>

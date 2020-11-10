@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://trooploop.ca/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;trooploop.ca" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://github.com/ztroop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/github.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://twitter.com/ztroopaloop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/twitter.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Troubleshooting VirtualBox</h1>
+        <div class="border"></div>
+        <time datetime="2019-08-24" class="date" itemprop="datePublished">
+            24 Aug 2019
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <h1 id="summary">Summary</h1>
+<p>In a majority of the classes I’ve taught, there’s a strong dependence on virtualization. This initially makes sense from a <strong>BYOD</strong> (bring your own device) strategy, but can present some challenges. The first thing you will need to do is to navigate to the <a href="https://www.virtualbox.org/wiki/Downloads">Downloads</a> page and pull the recent version.</p>
+<h2 id="extension-pack">Extension Pack</h2>
+<p>This is an optional package that you can install that will enable your VirtualBox. You do not have to install this, unless I say otherwise. It allows you to do the following:</p>
+<ul>
+<li>Support for USB 2.0 and USB 3.0 Devices</li>
+<li>VirtualBox RDP</li>
+<li>Disk Encryption</li>
+<li>NVMe and PXE Boot</li>
+</ul>
+<h2 id="common-issues">Common Issues</h2>
+<p>I’ve encountered a large number of issues that students have experienced over time. Please ensure you’ve checked through each one of these items before coming to me in-class.</p>
+<p>There are many cryptic errors that VirtualBox can throw. I’ll try to cover some examples. If all else fails, <em>Google it</em>.</p>
+<h2 id="enabling-virtualization">Enabling Virtualization</h2>
+<p>The most common problem I see is that the student does not have virtualization enabled in their PC.
+You will need to enter the BIOS or UEFI in your computer during the boot up process (before the operating system starts).</p>
+<p>Check your laptop model online to see what <em>key combination</em> is needed during the boot process to access the computer settings.</p>
+<p>When you get into the BIOS/UEFI settings, confirm that <em>virtualization</em> is enabled. Sometimes this can be labeled as <code>VT-X</code> or <code>AMD-V</code> (depending on you CPU manufacturer).</p>
+<h2 id="i-o-or-disk-error">I/O or Disk Error</h2>
+<ul>
+<li>Check to see if the virtual disk exists in the path that is configured.</li>
+<li>Check to see if your virtual machine’s virtual disk is out of space.</li>
+<li>Check to see if your system is out of disk space, especially if you’re using a dynamically growing virtual disk.</li>
+<li>Check to see if your system’s disk is healthy. If you’re using a SSD, you might be out of reads/writes.</li>
+</ul>
+<h2 id="register-error">Register Error</h2>
+<p>Check to see if you already have a VM profile that’s already using that virtual disk.</p>
+<h2 id="extension-pack-1">Extension Pack</h2>
+<ul>
+<li>If you’re failing to install the Extension Pack, confirm that it is the same virtual as the VirtualBox you have installed.</li>
+<li>If you’re seeing <strong>VERR ALREADY EXISTS</strong>, you probably already have the Extension Pack installed.</li>
+<li>If you’re importing an existing VM profile that uses Extension Pack features, you will need to install the Extension Pack.</li>
+<li>You can create a new VM profile, using the existing virtual disk to work-around this.</li>
+</ul>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Zackary Troop
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/ztroop/dracula-zen">Dracula Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>

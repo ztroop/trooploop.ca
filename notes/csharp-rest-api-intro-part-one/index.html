@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://trooploop.ca/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;trooploop.ca" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://github.com/ztroop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/github.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://twitter.com/ztroopaloop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/twitter.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>REST Web API Introduction in C# - Part One</h1>
+        <div class="border"></div>
+        <time datetime="2020-11-04" class="date" itemprop="datePublished">
+            04 Nov 2020
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <h1 id="summary">Summary</h1>
+<p>In this article, we'll be discussing the REST architectural style and demonstrate concepts through
+building an <strong>AP</strong>plication <strong>I</strong>nterface (<strong>API</strong>) in C# .NET Core! Exciting stuff, let's get started!</p>
+<h5 id="table-of-contents">Table of Contents</h5>
+<ol>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#rest-introduction">REST Introduction</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#history">History</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#platform-agnostic">Platform Agnostic</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#intended-audience">Intended Audience</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#environment-setup">Enviroment Setup</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#installing-dependencies">Installing Dependencies</a></li>
+<li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#code-walkthrough">Code Walkthrough</a></li>
+</ol>
+<h2 id="rest-introduction">REST Introduction</h2>
+<p><strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer (<strong>REST</strong>) is an software architectural style that defines
+a set of constraints to be used for creating software. It was originally proposed by Roy Fielding
+in his <a href="https://www.ics.uci.edu/%7Efielding/pubs/dissertation/fielding_dissertation.pdf">dissertation</a>.
+It's important to note that REST is not only applied to the web, via HTTP protocol.
+Other protocols like <a href="https://tools.ietf.org/html/rfc7252">CoAP</a> also employ REST principles.
+This architectural style provides conventions that makes development easier for engineers and improves
+interoperability between systems.</p>
+<p>See <a href="https://en.wikipedia.org/wiki/Representational_state_transfer">Representation State Transfer</a> for more information.</p>
+<h2 id="history">History</h2>
+<p>In the past, developing C# web services typically involved using <strong>S</strong>imple <strong>O</strong>bject <strong>A</strong>ccess
+<strong>P</strong>rotocol (<strong>SOAP</strong>), a standards-based web services access protocol that's been around for a long
+time. This, along with <strong>W</strong>indows <strong>C</strong>ommunication <strong>F</strong>oundation (<strong>WCF</strong>) are on their way out.</p>
+<p>At this point, I think you'll only be interacting with these from a legacy maintenance point of view.
+(I can only hope for your sake, anyway!)</p>
+<p>REST permits many different data formats including plain text, HTML, XML, and JSON, which yields
+better compatibility between systems, unlike SOAP.</p>
+<h2 id="platform-agnostic">Platform Agnostic</h2>
+<p>We'll be using .NET Core instead of .NET Framework. The reason is simple, we're focusing on technologies
+that are relevant for the future, not the past. See <a href="https://devblogs.microsoft.com/dotnet/net-core-is-the-future-of-net/">.NET Core is the Future of .NET</a></p>
+<blockquote>
+<p>New applications should be built on .NET Core. .NET Core is where future investments in .NET will happen. Existing applications are safe to remain on .NET Framework which will be supported. Existing applications that want to take advantage of the new features in .NET should consider moving to .NET Core.</p>
+</blockquote>
+<p>This has the added benefit of being able to develop on any system; Windows, Mac or Linux!</p>
+<h2 id="intended-audience">Intended Audience</h2>
+<p>This article assumes that the reader has an understanding of common programming idioms and patterns in the C# language. Experience with the command prompt or terminal is recommended, but not required. We'll touch on various concepts, but further research might be required if you're just starting out.</p>
+<h4 id="tools">Tools</h4>
+<p>We'll be using a terminal (or command prompt) and Microsoft Visual Code for code editing.
+I've found that developers learning C# become too dependent on Microsoft Visual Studio. I recommend <a href="https://code.visualstudio.com/">Microsoft Visual Code</a>, as this is an open-source and cross-platform editor. This was developed on Ubuntu Linux machine.</p>
+<h1 id="demonstration">Demonstration</h1>
+<p>Now that we've finished the preamble, let's dig into the activity!</p>
+<h2 id="environment-setup">Environment Setup</h2>
+<p>Open up your terminal and create a new project with the commands below.</p>
+<p>In Linux:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#50fa7b;">mkdir</span><span style="font-style:italic;color:#ffb86c;"> -p </span><span style="color:#bd93f9;">~</span><span style="color:#f8f8f2;">/projects/CSharpRESTDemo </span><span style="color:#6272a4;"># Creates all directories (nested).
+</span><span style="color:#f8f8f2;">cd </span><span style="color:#bd93f9;">~</span><span style="color:#f8f8f2;">/projects/CSharpRESTDemo </span><span style="color:#6272a4;"># Change to the top-level directory we created.
+</span><span style="color:#f8f8f2;">dotnet new console </span><span style="color:#6272a4;"># Creates C# project files using the console template.
+</span></code></pre>
+<p>In Windows:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#50fa7b;">mkdir </span><span style="color:#f1fa8c;">&quot;%USERPROFILE%\projects&quot; </span><span style="color:#6272a4;"># Creates the &quot;projects&quot; directory.
+</span><span style="color:#f8f8f2;">cd /d </span><span style="color:#f1fa8c;">&quot;%USERPROFILE%\projects&quot; </span><span style="color:#6272a4;"># Change to the directory we created.
+</span><span style="color:#f8f8f2;">mkdir CSharpRESTDemo </span><span style="color:#6272a4;"># Creates a directory for our project.
+</span><span style="color:#f8f8f2;">cd CSharpRESTDemo </span><span style="color:#6272a4;"># Change to the directory we just created.
+</span><span style="color:#f8f8f2;">dotnet new console </span><span style="color:#6272a4;"># Creates C# project files using the console template.
+</span></code></pre>
+<p>Why are we using the <code>console</code> template instead of <code>web</code>? Well, we want to start with a minimal
+configuration and build on it throughout this article. In the future though, the <code>web</code> template
+can save you some time.</p>
+<p>We should now see two files and a directory!</p>
+<ol>
+<li><strong>CSharpRESTDemo.csproj</strong> is a project file that contains the list of files included in a project along with the references to system assemblies.</li>
+<li><strong>Program.cs</strong> is the entry point of our program.</li>
+<li><strong>obj</strong> is a directory used to store temporary object files and other files used in order to create the final binary during the compilation process. The <strong>bin</strong> folder is the output folder for complete binaries (or assemblies).</li>
+</ol>
+<p>If you're using Microsoft Visual Studio, you will also have a <code>.sln</code> extension file. That's a structure file used for organizing projects in Microsoft Visual Studio.</p>
+<h2 id="installing-dependencies">Installing Dependencies</h2>
+<p>Before we dig into the code, we'll need to apply some dependencies that are not included in the standard library.
+In the terminal, we'll need to be in the working directory of <code>CSharpRESTDemo</code> and run the following commands:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package AutoMapper</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 8.0.0
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package AutoMapper.Extensions.Microsoft.DependencyInjection</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 6.0.0
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.AspNetCore.App
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.AspNetCore.JsonPatch</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.AspNetCore.Razor.Design</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.EntityFrameworkCore</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.EntityFrameworkCore.Design</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.EntityFrameworkCore.InMemory</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> add package Microsoft.EntityFrameworkCore.SqlServer</span><span style="font-style:italic;color:#ffb86c;"> --version</span><span style="color:#f8f8f2;"> 3.1.9
+</span></code></pre>
+<ol>
+<li><strong>AutoMapper</strong> is used in model projection scenarios to flatten complex object models to DTOs and other simple objects.</li>
+<li><strong>AspNetCore</strong> provides a framework and tooling for building web apps and services in .NET Core.</li>
+<li><strong>EntityFrameworkCore</strong> is a modern <strong>O</strong>bject <strong>R</strong>elational <strong>M</strong>apper (<strong>ORM</strong>) for .NET Core. It supports <a href="https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/concepts/linq/">LINQ</a> queries, change tracking, updates, and schema migrations.</li>
+</ol>
+<h2 id="code-walkthrough">Code Walkthrough</h2>
+<p>I'll be omitting <code>using</code> import lines for the sake of brevity. You can always review the code from the <a href="https://github.com/ztroop/csharp-rest-api-example">GitHub repository</a>.</p>
+<hr />
+<p>In <code>Program.cs</code>, replace contents with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">Program
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public static </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Main</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#8be9fd;">string</span><span style="color:#f8f8f2;">[] </span><span style="font-style:italic;color:#ffb86c;">args</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#50fa7b;">CreateWebHostBuilder</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">args</span><span style="color:#f8f8f2;">)</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Build</span><span style="color:#f8f8f2;">()</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Run</span><span style="color:#f8f8f2;">();
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public static </span><span style="font-style:italic;color:#66d9ef;">IWebHostBuilder </span><span style="color:#50fa7b;">CreateWebHostBuilder</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#8be9fd;">string</span><span style="color:#f8f8f2;">[] </span><span style="font-style:italic;color:#ffb86c;">args</span><span style="color:#f8f8f2;">) </span><span style="font-style:italic;color:#8be9fd;">=&gt;
+            </span><span style="color:#ffffff;">WebHost</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">CreateDefaultBuilder</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">args</span><span style="color:#f8f8f2;">)
+                </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseStartup</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Startup</span><span style="color:#f8f8f2;">&gt;();
+    </span><span style="color:#ffffff;">}
+}
+</span></code></pre>
+<p>We're creating a host using an instance of <code>IWebHostBuilder</code>. This is typically performed in the
+app's entry point, the <code>Main</code> method as shown above.</p>
+<p>When setting up a host, <code>Configure</code> and <code>ConfigureServices</code> methods can be provided. We specified
+our own <code>Startup</code> class, which we'll examine next. The <code>Startup</code> class <em>must</em> define a <code>Configure</code> method.</p>
+<p>See <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/web-host?view=aspnetcore-3.1#set-up-a-host">ASP.NET Core Web Host</a> for more information on how this works.</p>
+<hr />
+<p>Create a new file <code>Startup.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">Startup
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IConfigurationRoot </span><span style="color:#ffffff;">Configuration { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="color:#50fa7b;">Startup</span><span style="color:#f8f8f2;">()
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">builder </span><span style="color:#ff79c6;">= new </span><span style="font-style:italic;color:#66d9ef;">ConfigurationBuilder</span><span style="color:#f8f8f2;">()
+                </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">SetBasePath</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">Directory</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetCurrentDirectory</span><span style="color:#f8f8f2;">())
+                </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddJsonFile</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;appsettings.json&quot;</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">Configuration </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">builder</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Build</span><span style="color:#f8f8f2;">();
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">ConfigureServices</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">IServiceCollection </span><span style="font-style:italic;color:#ffb86c;">services</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddAutoMapper</span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">typeof</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">AutoMapping</span><span style="color:#f8f8f2;">));
+            </span><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddDbContext</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">DemoDbContext</span><span style="color:#f8f8f2;">&gt;(
+                </span><span style="font-style:italic;color:#ffb86c;">opt </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">opt</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseInMemoryDatabase</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">databaseName</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;InMemoryDb&quot;</span><span style="color:#f8f8f2;">)
+            );
+            </span><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddCors</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">opt </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">{
+                opt</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddPolicy</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;AllowMyOrigin&quot;</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#ffb86c;">builder </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">builder
+                    </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">WithOrigins</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;http://localhost:3000&quot;</span><span style="color:#f8f8f2;">)
+                    </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AllowAnyMethod</span><span style="color:#f8f8f2;">()
+                    </span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AllowAnyHeader</span><span style="color:#f8f8f2;">()
+                );
+            </span><span style="color:#ffffff;">}</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddScoped</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">ICustomerRepository</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">CustomerRepository</span><span style="color:#f8f8f2;">&gt;();
+            </span><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddMvc</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">opt </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">opt</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">EnableEndpointRouting </span><span style="color:#ff79c6;">= </span><span style="color:#bd93f9;">false</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Configure</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">IApplicationBuilder </span><span style="font-style:italic;color:#ffb86c;">app</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">IWebHostEnvironment </span><span style="font-style:italic;color:#ffb86c;">env</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">env</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">IsDevelopment</span><span style="color:#f8f8f2;">())
+            </span><span style="color:#ffffff;">{
+                app</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseDeveloperExceptionPage</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            app</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseCors</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;AllowMyOrigin&quot;</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">app</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseMvc</span><span style="color:#f8f8f2;">();
+        </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>The <code>Startup.cs</code> class is where:</p>
+<ol>
+<li>Services required by the app are configured.</li>
+<li>The app's request handling pipeline is defined, as a series of middleware components.</li>
+</ol>
+<p>There are <em>two</em> methods of interest in this class:</p>
+<ol>
+<li><strong>ConfigureServices</strong> is optional and used to configure <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1">dependency injection</a>.</li>
+<li><strong>Configure</strong> is used to set up middlewares, routing rules, etc.</li>
+</ol>
+<p>In the <code>Startup</code> constructor, we explicitly extract configuration values from <code>appsettings.json</code>. This configuration pattern is common, but alternatively, the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1">options pattern</a> <em>does</em> offer a greater separation of concerns.</p>
+<p>In the <code>ConfigureServices</code> method, we're doing the following:</p>
+<ul>
+<li><strong>AddAutoMapper</strong> registers AutoMapper and defines a <a href="https://docs.automapper.org/en/stable/Configuration.html#profile-instances">profile</a>. We're using this to map <strong>D</strong>ata <strong>T</strong>ransfer <strong>O</strong>bjects (<strong>DTO</strong>), but more on that later.</li>
+<li><strong>AddDbContext</strong> registers EntityFramework, where we specify our context and use of a in-memory database.</li>
+<li><strong>AddCors</strong> registers a CORS policy, which we will reference in the <strong>Configure</strong> method. <a href="https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1">CORS</a> is a lengthy topic, but you should read about it if you're unfamiliar with it. Many developers simply bypass it by <em>allowing any origin</em>, but this can lead to security problems.</li>
+<li><strong>AddScoped</strong> registers a scoped lifetime, the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes">lifetime</a> of a single request. We'll talk more about <em>repositories</em> later.</li>
+<li><strong>AddMvc</strong> registers MVC services.</li>
+</ul>
+<p>In the <code>Configure</code> method, we check to see if the application is running in development mode to determine if we should show the user an exception page if something goes wrong. You wouldn't want to show a stack trace to the user in a production environment. After that, we tell our application to add MVC to the request execution pipeline. MVC will allow us to start defining routes and controllers.</p>
+<p>See <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/?view=aspnetcore-3.1&amp;tabs=linux">ASP.NET Core Fundamentals</a> for more information.</p>
+<hr />
+<p>Create a new folder called <code>Entities</code> and create a new file <code>DemoDbContext.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Entities
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">DemoDbContext </span><span style="color:#f8f8f2;">: </span><span style="text-decoration:underline;font-style:italic;color:#8be9fd;">DbContext
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="color:#50fa7b;">DemoDbContext</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">DbContextOptions</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">DemoDbContext</span><span style="color:#f8f8f2;">&gt; </span><span style="font-style:italic;color:#ffb86c;">options</span><span style="color:#f8f8f2;">) : </span><span style="color:#bd93f9;">base</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">options</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+
+        }
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">DbSet</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt; </span><span style="color:#ffffff;">Customers { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>We create a <code>DbSet</code> for <code>Customers</code>. A <code>DbSet</code> provides a mapping to the database table object.</p>
+<hr />
+<p>In the <code>Entities</code> folder, create a file <code>Customer.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Entities
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">Customer
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="color:#ffffff;">Id { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Firstname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Lastname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#ffffff;">Age { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>We define a <code>Customer</code> entity with <em>four</em> properties. We're using <code>Guid</code> in this example to demonstrate
+that using an <code>int</code> is not always an appropriate choice. You wouldn't want to allow for the possibility
+of users iterating over your records in some cases.</p>
+<hr />
+<p>Next, we'll create a new directory called <code>Repositories</code> and create a file <code>CustomerRepository.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Repositories
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">CustomerRepository </span><span style="color:#f8f8f2;">: </span><span style="text-decoration:underline;font-style:italic;color:#8be9fd;">ICustomerRepository
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">private </span><span style="font-style:italic;color:#66d9ef;">DemoDbContext </span><span style="color:#ffffff;">_context</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ff79c6;">public </span><span style="color:#50fa7b;">CustomerRepository</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">DemoDbContext </span><span style="font-style:italic;color:#ffb86c;">context</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            _context </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">context</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IQueryable</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt; </span><span style="color:#50fa7b;">GetAll</span><span style="color:#f8f8f2;">()
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#ff79c6;">return </span><span style="color:#ffffff;">_context</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Customers</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#ff79c6;">return </span><span style="color:#ffffff;">_context</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Customers</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">FirstOrDefault</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">x</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Id </span><span style="color:#ff79c6;">== </span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Add</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="font-style:italic;color:#ffb86c;">item</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            _context</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Customers</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Add</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">item</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Delete</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="color:#ffffff;">Customer </span><span style="color:#ff79c6;">= </span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">_context</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Customers</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Remove</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">Customer</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Update</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="font-style:italic;color:#ffb86c;">item</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            _context</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Customers</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Update</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">item</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">()
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#ff79c6;">return </span><span style="color:#ffffff;">_context</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">SaveChanges</span><span style="color:#f8f8f2;">() </span><span style="color:#ff79c6;">&gt;= </span><span style="color:#bd93f9;">0</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>Now we'll create an interface for the repository we just created. Create a file <code>ICustomerRepository.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Repositories
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">interface </span><span style="color:#f8f8f2;">ICustomerRepository
+    </span><span style="color:#ffffff;">{
+        </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Add</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="font-style:italic;color:#ffb86c;">item</span><span style="color:#f8f8f2;">);
+        </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Delete</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">);
+        </span><span style="font-style:italic;color:#66d9ef;">IQueryable</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt; </span><span style="color:#50fa7b;">GetAll</span><span style="color:#f8f8f2;">();
+        </span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">);
+        </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">();
+        </span><span style="font-style:italic;color:#8be9fd;">void </span><span style="color:#50fa7b;">Update</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="font-style:italic;color:#ffb86c;">item</span><span style="color:#f8f8f2;">);
+    </span><span style="color:#ffffff;">}
+}
+</span></code></pre>
+<p>The <em>repository</em> pattern in C# mediates between the domain and data mapping layers. It is
+mostly used where we need to modify the data before passing to the next stage, providing
+a clean separation and one-way dependency between the domain and data mapping layers.</p>
+<p>There are <em>two</em> clear advantages:</p>
+<ol>
+<li><strong>Improving Testability</strong>. We can create an interface of the repository, and reference it.
+We can make a fake object (using <strong>moq</strong> for instance) which implements that interface.</li>
+<li><strong>Improved Modularity</strong>. We can swap out with various data stores without changing the underlying API.</li>
+</ol>
+<hr />
+<p>Create a new folder called <code>Dtos</code> and create a file <code>CustomerDto.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Dtos
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">CustomerDto
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="color:#ffffff;">Id { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Firstname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Lastname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#ffffff;">Age { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>Create a file <code>CustomerCreateDto.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Dtos
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">CustomerCreateDto
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Firstname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Lastname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#ffffff;">Age { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>Create a file <code>CustomerUpdateDto.cs</code> with the following: (yes, same as previous)</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Dtos
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">CustomerUpdateDto
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Firstname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">Lastname { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#8be9fd;">int </span><span style="color:#ffffff;">Age { </span><span style="font-style:italic;color:#8be9fd;">get</span><span style="color:#f8f8f2;">; </span><span style="font-style:italic;color:#8be9fd;">set</span><span style="color:#f8f8f2;">; </span><span style="color:#ffffff;">}
+    }
+}
+</span></code></pre>
+<p>A <strong>D</strong>ata <strong>T</strong>ransfer <strong>O</strong>bject (<strong>DTO</strong>) is an object that is used to encapsulate data. As of this moment, our code would map directly to the database fields. That's not always desirable. Sometimes you want to change the shape of the data for the following reasons:</p>
+<ul>
+<li><strong>Hide</strong> particular properties that clients are not supposed to view.</li>
+<li><strong>Omit</strong> some properties in order to improve performance.</li>
+<li><strong>Decouple</strong> the service layer from the database layer.</li>
+</ul>
+<p>See <a href="https://docs.microsoft.com/en-us/aspnet/web-api/overview/data/using-web-api-with-entity-framework/part-5">Create Data Transfer Objects</a> for more information.</p>
+<hr />
+<p>In the project folder, create a file <code>AutoMapping.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">AutoMapping </span><span style="color:#f8f8f2;">: </span><span style="text-decoration:underline;font-style:italic;color:#8be9fd;">Profile
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#ff79c6;">public </span><span style="color:#50fa7b;">AutoMapping</span><span style="color:#f8f8f2;">()
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;();
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt;();
+
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">CustomerCreateDto</span><span style="color:#f8f8f2;">&gt;();
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerCreateDto</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt;();
+
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">CustomerUpdateDto</span><span style="color:#f8f8f2;">&gt;();
+        </span><span style="color:#50fa7b;">CreateMap</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerUpdateDto</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt;();
+    </span><span style="color:#ffffff;">}
+}
+</span></code></pre>
+<p>This creates a mapping between the DTO and entity objects.</p>
+<hr />
+<p>Add a folder <code>Controllers</code> and create a file <code>CustomerController.cs</code> with the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">AutoMapper</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">Dtos</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">Entities</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">Repositories</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">Microsoft</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">AspNetCore</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">JsonPatch</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">Microsoft</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">AspNetCore</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">Mvc</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">System</span><span style="color:#f8f8f2;">;
+</span><span style="color:#ff79c6;">using </span><span style="text-decoration:underline;color:#66d9ef;">System</span><span style="color:#ff79c6;">.</span><span style="text-decoration:underline;color:#66d9ef;">Linq</span><span style="color:#f8f8f2;">;
+
+</span><span style="font-style:italic;color:#ff79c6;">namespace </span><span style="color:#8be9fd;">CSharpRESTDemo</span><span style="color:#ff79c6;">.</span><span style="color:#8be9fd;">Controllers
+</span><span style="color:#ffffff;">{
+    </span><span style="color:#f8f8f2;">[Route(</span><span style="color:#f1fa8c;">&quot;api/[controller]&quot;</span><span style="color:#f8f8f2;">)]
+    </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#ff79c6;">class </span><span style="text-decoration:underline;color:#8be9fd;">CustomersController </span><span style="color:#f8f8f2;">: </span><span style="text-decoration:underline;font-style:italic;color:#8be9fd;">Controller
+    </span><span style="color:#ffffff;">{
+        </span><span style="color:#ff79c6;">private </span><span style="font-style:italic;color:#66d9ef;">IMapper </span><span style="color:#ffffff;">_mapper</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ff79c6;">private </span><span style="font-style:italic;color:#66d9ef;">ICustomerRepository </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#f8f8f2;">;
+
+        </span><span style="color:#ff79c6;">public </span><span style="color:#50fa7b;">CustomersController</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">IMapper </span><span style="font-style:italic;color:#ffb86c;">mapper</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#66d9ef;">ICustomerRepository </span><span style="font-style:italic;color:#ffb86c;">customerRepository</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            _mapper </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">mapper</span><span style="color:#f8f8f2;">;
+            </span><span style="color:#ffffff;">_customerRepository </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">customerRepository</span><span style="color:#f8f8f2;">;
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#f8f8f2;">[HttpGet]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">GetAllCustomers</span><span style="color:#f8f8f2;">()
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">allCustomers </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetAll</span><span style="color:#f8f8f2;">()</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">ToList</span><span style="color:#f8f8f2;">();
+
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">allCustomersDto </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">allCustomers</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Select</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">x </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">x</span><span style="color:#f8f8f2;">));
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">Ok</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">allCustomersDto</span><span style="color:#f8f8f2;">);
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#f8f8f2;">[HttpGet]
+        [Route(</span><span style="color:#f1fa8c;">&quot;{id}&quot;</span><span style="color:#f8f8f2;">, </span><span style="font-style:italic;color:#ffb86c;">Name </span><span style="color:#ff79c6;">= </span><span style="color:#f1fa8c;">&quot;GetSingleCustomer&quot;</span><span style="color:#f8f8f2;">)]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">GetSingleCustomer</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="color:#ffffff;">customerFromRepo </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">customerFromRepo </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">null</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">NotFound</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">Ok</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">customerFromRepo</span><span style="color:#f8f8f2;">));
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#f8f8f2;">[HttpPost]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">AddCustomer</span><span style="color:#f8f8f2;">([FromBody] </span><span style="font-style:italic;color:#66d9ef;">CustomerCreateDto </span><span style="font-style:italic;color:#ffb86c;">customerCreateDto</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#66d9ef;">Customer </span><span style="color:#ffffff;">toAdd </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">Customer</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">customerCreateDto</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Add</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">toAdd</span><span style="color:#f8f8f2;">);
+
+            </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#ffffff;">result </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">();
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#ffffff;">result</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return new </span><span style="font-style:italic;color:#66d9ef;">StatusCodeResult</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">500</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">CreatedAtRoute</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;GetSingleCustomer&quot;</span><span style="color:#f8f8f2;">, </span><span style="color:#ff79c6;">new </span><span style="color:#ffffff;">{ id </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">toAdd</span><span style="color:#ff79c6;">.</span><span style="color:#ffffff;">Id }</span><span style="color:#f8f8f2;">, </span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">toAdd</span><span style="color:#f8f8f2;">));
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#f8f8f2;">[HttpPut]
+        [Route(</span><span style="color:#f1fa8c;">&quot;{id}&quot;</span><span style="color:#f8f8f2;">)]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">UpdateCustomer</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">, [FromBody] </span><span style="font-style:italic;color:#66d9ef;">CustomerUpdateDto </span><span style="font-style:italic;color:#ffb86c;">updateDto</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">null</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">NotFound</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            _mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">updateDto</span><span style="color:#f8f8f2;">, </span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Update</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">);
+
+            </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#ffffff;">result </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">();
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#ffffff;">result</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return new </span><span style="font-style:italic;color:#66d9ef;">StatusCodeResult</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">500</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">Ok</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">));
+        </span><span style="color:#ffffff;">}
+
+        </span><span style="color:#f8f8f2;">[HttpPatch]
+        [Route(</span><span style="color:#f1fa8c;">&quot;{id}&quot;</span><span style="color:#f8f8f2;">)]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">PartiallyUpdate</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">, [FromBody] </span><span style="font-style:italic;color:#66d9ef;">JsonPatchDocument</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerUpdateDto</span><span style="color:#f8f8f2;">&gt; </span><span style="font-style:italic;color:#ffb86c;">customerPatchDoc</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">customerPatchDoc </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">null</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">BadRequest</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">null</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">NotFound</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">customerToPatch </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerUpdateDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">customerPatchDoc</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">ApplyTo</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">customerToPatch</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">customerToPatch</span><span style="color:#f8f8f2;">, </span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Update</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">);
+
+            </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#ffffff;">result </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">();
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#ffffff;">result</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return new </span><span style="font-style:italic;color:#66d9ef;">StatusCodeResult</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">500</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">Ok</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">_mapper</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Map</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">CustomerDto</span><span style="color:#f8f8f2;">&gt;(</span><span style="color:#ffffff;">existingCustomer</span><span style="color:#f8f8f2;">));
+        </span><span style="color:#ffffff;">}
+
+
+        </span><span style="color:#f8f8f2;">[HttpDelete]
+        [Route(</span><span style="color:#f1fa8c;">&quot;{id}&quot;</span><span style="color:#f8f8f2;">)]
+        </span><span style="color:#ff79c6;">public </span><span style="font-style:italic;color:#66d9ef;">IActionResult </span><span style="color:#50fa7b;">Remove</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#66d9ef;">Guid </span><span style="font-style:italic;color:#ffb86c;">id</span><span style="color:#f8f8f2;">)
+        </span><span style="color:#ffffff;">{
+            </span><span style="font-style:italic;color:#8be9fd;">var </span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetSingle</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">existingCustomer </span><span style="color:#ff79c6;">== </span><span style="color:#bd93f9;">null</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">NotFound</span><span style="color:#f8f8f2;">();
+            </span><span style="color:#ffffff;">}
+
+            _customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Delete</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">id</span><span style="color:#f8f8f2;">);
+
+            </span><span style="font-style:italic;color:#8be9fd;">bool </span><span style="color:#ffffff;">result </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">_customerRepository</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">Save</span><span style="color:#f8f8f2;">();
+
+            </span><span style="color:#ff79c6;">if </span><span style="color:#f8f8f2;">(</span><span style="color:#ff79c6;">!</span><span style="color:#ffffff;">result</span><span style="color:#f8f8f2;">)
+            </span><span style="color:#ffffff;">{
+                </span><span style="color:#ff79c6;">return new </span><span style="font-style:italic;color:#66d9ef;">StatusCodeResult</span><span style="color:#f8f8f2;">(</span><span style="color:#bd93f9;">500</span><span style="color:#f8f8f2;">);
+            </span><span style="color:#ffffff;">}
+
+            </span><span style="color:#ff79c6;">return </span><span style="color:#50fa7b;">NoContent</span><span style="color:#f8f8f2;">();
+        </span><span style="color:#ffffff;">}
+
+    }
+}
+</span></code></pre>
+<p>Each method in the <code>CustomersController</code> class has an attribute that defines an HTTP verb and route.
+When a client interacts with <code>api/customer</code> with a <code>POST</code> request method, it will execute the code
+in the <code>AddCustomer</code> method as an example.</p>
+<p>Note the fact that we do not alter the shape of the data at this layer. We've been using
+<em>repositories</em> and <em>data transfer objects</em> to separate our layers. On a larger scale project,
+with many developers involved, having this insulation layer is a life-saver.</p>
+<p>Stay tuned for Part Two!</p>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Zackary Troop
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/ztroop/dracula-zen">Dracula Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>
