@@ -1,0 +1,15 @@
+base_url = "https://trooploop.ca"
+theme = "dracula-zen"
+
+# Whether to automatically compile all Sass files in the sass directory.
+compile_sass = true
+highlight_code = true
+highlight_theme = "dracula"
+
+# Whether to build a search index to be used later on by a JavaScript library.
+build_search_index = true
+
+[extra]
+author = "Zackary Troop"
+github = "ztroop"
+twitter = "ztroopaloop"
