@@ -18,6 +18,8 @@ building an **AP**plication **I**nterface (**API**) in C# .NET Core! Exciting st
 6. [Installing Dependencies](#installing-dependencies)
 7. [Code Walkthrough](#code-walkthrough)
 
+Links referenced are _encouraged_ to be explored for learning reinforcement.
+
 ## REST Introduction
 
 **RE**presentational **S**tate **T**ransfer (**REST**) is an software architectural style that defines
@@ -42,7 +44,16 @@ At this point, I think you'll only be interacting with these from a legacy maint
 REST permits many different data formats including plain text, HTML, XML, and JSON, which yields
 better compatibility between systems, unlike SOAP.
 
-## Platform Agnostic
+## Intended Audience
+
+This article assumes that the reader has an understanding of common programming idioms and patterns in the C# language. Experience with the command prompt or terminal is recommended, but not required. We'll touch on various concepts, but further research might be required if you're just starting out.
+
+## Tooling
+
+We'll be using a terminal (or command prompt) and Visual Code for code editing.
+I've found that developers learning C# become too dependent on Visual Studio. In general, I recommend [Visual Code](https://code.visualstudio.com/), as it's an open-source and cross-platform editor.
+
+#### Platform Agnostic
 
 We'll be using .NET Core instead of .NET Framework. The reason is simple, we're focusing on technologies
 that are relevant for the future, not the past. See [.NET Core is the Future of .NET](https://devblogs.microsoft.com/dotnet/net-core-is-the-future-of-net/)
@@ -51,20 +62,12 @@ that are relevant for the future, not the past. See [.NET Core is the Future of 
 
 This has the added benefit of being able to develop on any system; Windows, Mac or Linux!
 
-## Intended Audience
-
-This article assumes that the reader has an understanding of common programming idioms and patterns in the C# language. Experience with the command prompt or terminal is recommended, but not required. We'll touch on various concepts, but further research might be required if you're just starting out.
-
-#### Tools
-
-We'll be using a terminal (or command prompt) and Microsoft Visual Code for code editing.
-I've found that developers learning C# become too dependent on Microsoft Visual Studio. I recommend [Microsoft Visual Code](https://code.visualstudio.com/), as this is an open-source and cross-platform editor. This was developed on Ubuntu Linux machine.
-
 # Demonstration
 
 Now that we've finished the preamble, let's dig into the activity!
+This was developed on Ubuntu Linux, but should be largely transferable to other operating systems.
 
-## Environment Setup
+## Environment
 
 Open up your terminal and create a new project with the commands below.
 
@@ -92,9 +95,9 @@ can save you some time.
 
 We should now see two files and a directory!
 
-1. **CSharpRESTDemo.csproj** is a project file that contains the list of files included in a project along with the references to system assemblies.
-2. **Program.cs** is the entry point of our program.
-3. **obj** is a directory used to store temporary object files and other files used in order to create the final binary during the compilation process. The **bin** folder is the output folder for complete binaries (or assemblies).
+1. `CSharpRESTDemo.csproj` is a project file that contains the list of files included in a project along with the references to system assemblies.
+2. `Program.cs` is the entry point of our program.
+3. `obj` is a directory used to store temporary object files and other files used in order to create the final binary during the compilation process. The `bin` folder is the output folder for complete binaries (or assemblies).
 
 If you're using Microsoft Visual Studio, you will also have a `.sln` extension file. That's a structure file used for organizing projects in Microsoft Visual Studio.
 
@@ -209,8 +212,8 @@ The `Startup.cs` class is where:
 
 There are _two_ methods of interest in this class:
 
-1. **ConfigureServices** is optional and used to configure [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1).
-2. **Configure** is used to set up middlewares, routing rules, etc.
+1. `ConfigureServices` is optional and used to configure [dependency injection](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1).
+2. `Configure` is used to set up middlewares, routing rules, etc.
 
 In the `Startup` constructor, we explicitly extract configuration values from `appsettings.json`. This configuration pattern is common, but alternatively, the [options pattern](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1) _does_ offer a greater separation of concerns.
 
@@ -218,7 +221,7 @@ In the `ConfigureServices` method, we're doing the following:
 
 - **AddAutoMapper** registers AutoMapper and defines a [profile](https://docs.automapper.org/en/stable/Configuration.html#profile-instances). We're using this to map **D**ata **T**ransfer **O**bjects (**DTO**), but more on that later.
 - **AddDbContext** registers EntityFramework, where we specify our context and use of a in-memory database.
-- **AddCors** registers a CORS policy, which we will reference in the **Configure** method. [CORS](https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1) is a lengthy topic, but you should read about it if you're unfamiliar with it. Many developers simply bypass it by _allowing any origin_, but this can lead to security problems.
+- **AddCors** registers a CORS policy, which we will reference in the `Configure` method. [CORS](https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1) is a lengthy topic, but you should read about it if you're unfamiliar with it. Many developers simply bypass it by _allowing any origin_, but this can lead to security problems.
 - **AddScoped** registers a scoped lifetime, the [lifetime](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes) of a single request. We'll talk more about _repositories_ later.
 - **AddMvc** registers MVC services.
 
@@ -341,7 +344,7 @@ a clean separation and one-way dependency between the domain and data mapping la
 There are _two_ clear advantages:
 
 1. **Improving Testability**. We can create an interface of the repository, and reference it.
-We can make a fake object (using **moq** for instance) which implements that interface.
+We can make a fake object (using `moq` for example) which implements that interface.
 2. **Improved Modularity**. We can swap out with various data stores without changing the underlying API.
 
 ---
@@ -583,4 +586,19 @@ Note the fact that we do not alter the shape of the data at this layer. We've be
 _repositories_ and _data transfer objects_ to separate our layers. On a larger scale project,
 with many developers involved, having this insulation layer is a life-saver.
 
-Stay tuned for Part Two!
+---
+
+At this point in time, you should have a working application after an initial migration of
+the database.
+
+> The migrations feature in EF Core provides a way to incrementally update the database schema to keep it in sync with the application's data model while preserving existing data in the database.
+
+See [Migrations Overview](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli) for more information.
+
+```sh
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+dotnet run
+```
+
+Check out [Part Two](@/notes/csharprestapi-2.md)!
