@@ -83,6 +83,7 @@ building an <strong>AP</strong>plication <strong>I</strong>nterface (<strong>API
 <li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#installing-dependencies">Installing Dependencies</a></li>
 <li><a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/#code-walkthrough">Code Walkthrough</a></li>
 </ol>
+<p>Links referenced are <em>encouraged</em> to be explored for learning reinforcement.</p>
 <h2 id="rest-introduction">REST Introduction</h2>
 <p><strong>RE</strong>presentational <strong>S</strong>tate <strong>T</strong>ransfer (<strong>REST</strong>) is an software architectural style that defines
 a set of constraints to be used for creating software. It was originally proposed by Roy Fielding
@@ -100,21 +101,22 @@ time. This, along with <strong>W</strong>indows <strong>C</strong>ommunication <
 (I can only hope for your sake, anyway!)</p>
 <p>REST permits many different data formats including plain text, HTML, XML, and JSON, which yields
 better compatibility between systems, unlike SOAP.</p>
-<h2 id="platform-agnostic">Platform Agnostic</h2>
+<h2 id="intended-audience">Intended Audience</h2>
+<p>This article assumes that the reader has an understanding of common programming idioms and patterns in the C# language. Experience with the command prompt or terminal is recommended, but not required. We'll touch on various concepts, but further research might be required if you're just starting out.</p>
+<h2 id="tooling">Tooling</h2>
+<p>We'll be using a terminal (or command prompt) and Visual Code for code editing.
+I've found that developers learning C# become too dependent on Visual Studio. In general, I recommend <a href="https://code.visualstudio.com/">Visual Code</a>, as it's an open-source and cross-platform editor.</p>
+<h4 id="platform-agnostic">Platform Agnostic</h4>
 <p>We'll be using .NET Core instead of .NET Framework. The reason is simple, we're focusing on technologies
 that are relevant for the future, not the past. See <a href="https://devblogs.microsoft.com/dotnet/net-core-is-the-future-of-net/">.NET Core is the Future of .NET</a></p>
 <blockquote>
 <p>New applications should be built on .NET Core. .NET Core is where future investments in .NET will happen. Existing applications are safe to remain on .NET Framework which will be supported. Existing applications that want to take advantage of the new features in .NET should consider moving to .NET Core.</p>
 </blockquote>
 <p>This has the added benefit of being able to develop on any system; Windows, Mac or Linux!</p>
-<h2 id="intended-audience">Intended Audience</h2>
-<p>This article assumes that the reader has an understanding of common programming idioms and patterns in the C# language. Experience with the command prompt or terminal is recommended, but not required. We'll touch on various concepts, but further research might be required if you're just starting out.</p>
-<h4 id="tools">Tools</h4>
-<p>We'll be using a terminal (or command prompt) and Microsoft Visual Code for code editing.
-I've found that developers learning C# become too dependent on Microsoft Visual Studio. I recommend <a href="https://code.visualstudio.com/">Microsoft Visual Code</a>, as this is an open-source and cross-platform editor. This was developed on Ubuntu Linux machine.</p>
 <h1 id="demonstration">Demonstration</h1>
-<p>Now that we've finished the preamble, let's dig into the activity!</p>
-<h2 id="environment-setup">Environment Setup</h2>
+<p>Now that we've finished the preamble, let's dig into the activity!
+This was developed on Ubuntu Linux, but should be largely transferable to other operating systems.</p>
+<h2 id="environment">Environment</h2>
 <p>Open up your terminal and create a new project with the commands below.</p>
 <p>In Linux:</p>
 <pre style="background-color:#282a36;">
@@ -135,9 +137,9 @@ configuration and build on it throughout this article. In the future though, the
 can save you some time.</p>
 <p>We should now see two files and a directory!</p>
 <ol>
-<li><strong>CSharpRESTDemo.csproj</strong> is a project file that contains the list of files included in a project along with the references to system assemblies.</li>
-<li><strong>Program.cs</strong> is the entry point of our program.</li>
-<li><strong>obj</strong> is a directory used to store temporary object files and other files used in order to create the final binary during the compilation process. The <strong>bin</strong> folder is the output folder for complete binaries (or assemblies).</li>
+<li><code>CSharpRESTDemo.csproj</code> is a project file that contains the list of files included in a project along with the references to system assemblies.</li>
+<li><code>Program.cs</code> is the entry point of our program.</li>
+<li><code>obj</code> is a directory used to store temporary object files and other files used in order to create the final binary during the compilation process. The <code>bin</code> folder is the output folder for complete binaries (or assemblies).</li>
 </ol>
 <p>If you're using Microsoft Visual Studio, you will also have a <code>.sln</code> extension file. That's a structure file used for organizing projects in Microsoft Visual Studio.</p>
 <h2 id="installing-dependencies">Installing Dependencies</h2>
@@ -238,15 +240,15 @@ our own <code>Startup</code> class, which we'll examine next. The <code>Startup<
 </ol>
 <p>There are <em>two</em> methods of interest in this class:</p>
 <ol>
-<li><strong>ConfigureServices</strong> is optional and used to configure <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1">dependency injection</a>.</li>
-<li><strong>Configure</strong> is used to set up middlewares, routing rules, etc.</li>
+<li><code>ConfigureServices</code> is optional and used to configure <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1">dependency injection</a>.</li>
+<li><code>Configure</code> is used to set up middlewares, routing rules, etc.</li>
 </ol>
 <p>In the <code>Startup</code> constructor, we explicitly extract configuration values from <code>appsettings.json</code>. This configuration pattern is common, but alternatively, the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options?view=aspnetcore-3.1">options pattern</a> <em>does</em> offer a greater separation of concerns.</p>
 <p>In the <code>ConfigureServices</code> method, we're doing the following:</p>
 <ul>
 <li><strong>AddAutoMapper</strong> registers AutoMapper and defines a <a href="https://docs.automapper.org/en/stable/Configuration.html#profile-instances">profile</a>. We're using this to map <strong>D</strong>ata <strong>T</strong>ransfer <strong>O</strong>bjects (<strong>DTO</strong>), but more on that later.</li>
 <li><strong>AddDbContext</strong> registers EntityFramework, where we specify our context and use of a in-memory database.</li>
-<li><strong>AddCors</strong> registers a CORS policy, which we will reference in the <strong>Configure</strong> method. <a href="https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1">CORS</a> is a lengthy topic, but you should read about it if you're unfamiliar with it. Many developers simply bypass it by <em>allowing any origin</em>, but this can lead to security problems.</li>
+<li><strong>AddCors</strong> registers a CORS policy, which we will reference in the <code>Configure</code> method. <a href="https://docs.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-3.1">CORS</a> is a lengthy topic, but you should read about it if you're unfamiliar with it. Many developers simply bypass it by <em>allowing any origin</em>, but this can lead to security problems.</li>
 <li><strong>AddScoped</strong> registers a scoped lifetime, the <a href="https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-3.1#service-lifetimes">lifetime</a> of a single request. We'll talk more about <em>repositories</em> later.</li>
 <li><strong>AddMvc</strong> registers MVC services.</li>
 </ul>
@@ -353,7 +355,7 @@ a clean separation and one-way dependency between the domain and data mapping la
 <p>There are <em>two</em> clear advantages:</p>
 <ol>
 <li><strong>Improving Testability</strong>. We can create an interface of the repository, and reference it.
-We can make a fake object (using <strong>moq</strong> for instance) which implements that interface.</li>
+We can make a fake object (using <code>moq</code> for example) which implements that interface.</li>
 <li><strong>Improved Modularity</strong>. We can swap out with various data stores without changing the underlying API.</li>
 </ol>
 <hr />
@@ -578,7 +580,19 @@ in the <code>AddCustomer</code> method as an example.</p>
 <p>Note the fact that we do not alter the shape of the data at this layer. We've been using
 <em>repositories</em> and <em>data transfer objects</em> to separate our layers. On a larger scale project,
 with many developers involved, having this insulation layer is a life-saver.</p>
-<p>Stay tuned for Part Two!</p>
+<hr />
+<p>At this point in time, you should have a working application after an initial migration of
+the database.</p>
+<blockquote>
+<p>The migrations feature in EF Core provides a way to incrementally update the database schema to keep it in sync with the application's data model while preserving existing data in the database.</p>
+</blockquote>
+<p>See <a href="https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli">Migrations Overview</a> for more information.</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> ef migrations add InitialCreate
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> ef database update
+</span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> run
+</span></code></pre>
+<p>Check out <a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-two/">Part Two</a>!</p>
 
     </div>
 </article>

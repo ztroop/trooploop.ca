@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://trooploop.ca/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;trooploop.ca" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://github.com/ztroop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/github.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://twitter.com/ztroopaloop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/twitter.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>REST Web API Introduction in C# - Part Two</h1>
+        <div class="border"></div>
+        <time datetime="2020-11-23" class="date" itemprop="datePublished">
+            23 Nov 2020
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <h1 id="summary">Summary</h1>
+<p>This is the second part of the <strong>REST Web API Introduction in C#</strong> series. If you haven't already,
+check out <a href="https://trooploop.ca/notes/csharp-rest-api-intro-part-one/">Part One</a>!</p>
+<h1 id="prerequisites">Prerequisites</h1>
+<p>Please make sure you have <a href="https://docs.docker.com/get-docker/">docker</a> and <a href="https://docs.docker.com/compose/install/">docker-compose</a> installed.</p>
+<h1 id="demonstration-continued">Demonstration Continued</h1>
+<p>In the <strong>Part One</strong>, we built the majority of our application. It should be functional at this point,
+but unrealistic in a production environment. We ideally wouldn't be using an in-memory database, let's change that.</p>
+<h2 id="switching-databases">Switching Databases</h2>
+<p>In the <code>Startup</code> constructor, in the <code>Startup.cs</code> file, we load configuration from <code>appsettings.json</code>.
+We haven't created that yet, so let's do that and add the snippet below. We'll use that to load connection
+details to our database.</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#f8f8f2;">{
+  </span><span style="color:#eeeeee;">&quot;</span><span style="color:#f1fa8c;">ConnectionStrings</span><span style="color:#eeeeee;">&quot;</span><span style="color:#f8f8f2;">: {
+    </span><span style="color:#eeeeee;">&quot;</span><span style="color:#f1fa8c;">DefaultConnection</span><span style="color:#eeeeee;">&quot;</span><span style="color:#f8f8f2;">: </span><span style="color:#eeeeee;">&quot;</span><span style="color:#f1fa8c;">Server=db</span><span style="color:#ff79c6;">\\</span><span style="color:#f1fa8c;">SQLEXPRESS,1433;Database=master;User ID=sa;Password=CHANGEME123!;Integrated Security=False;</span><span style="color:#eeeeee;">&quot;
+  </span><span style="color:#f8f8f2;">}
+}
+</span></code></pre>
+<p>We're specifying a remote connection to a host known as <code>db</code>, which will resolve to an IP address. The reason
+for this will become clearer as we complete our <code>docker</code> setup. <code>1433</code> is the port. The database itself will be an instance of Microsoft SQL Express.
+The database name is <code>master</code>, with a user <code>sa</code> and password <code>CHANGEME123!</code>. We also set integrated security to <code>False</code> because
+we <em>do</em> want to use our specified credentials.</p>
+<blockquote>
+<p>Integrated Security When false, User ID and Password are specified in the connection. When true, the current Windows account credentials are used for authentication. Recognized values are true, false, yes, no, and sspi (strongly recommended), which is equivalent to true. If User ID and Password are specified and Integrated Security is set to true, the User ID and Password will be ignored and Integrated Security will be used.</p>
+</blockquote>
+<p>See <a href="https://docs.microsoft.com/en-us/dotnet/api/system.data.sqlclient.sqlconnection.connectionstring?redirectedfrom=MSDN&amp;view=dotnet-plat-ext-5.0#System_Data_SqlClient_SqlConnection_ConnectionString">SqlConnection.ConnectionString</a> for more information.</p>
+<hr />
+<p>In the same file, under <code>ConfigureServices</code>, we'll replace the line:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddDbContext</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">DemoDbContext</span><span style="color:#f8f8f2;">&gt;(</span><span style="font-style:italic;color:#ffb86c;">opt </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">opt</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseInMemoryDatabase</span><span style="color:#f8f8f2;">(</span><span style="font-style:italic;color:#ffb86c;">databaseName</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;InMemoryDb&quot;</span><span style="color:#f8f8f2;">));
+</span></code></pre>
+<p>With the following:</p>
+<pre style="background-color:#282a36;">
+<code><span style="font-style:italic;color:#8be9fd;">string </span><span style="color:#ffffff;">connectionString </span><span style="color:#ff79c6;">= </span><span style="color:#ffffff;">Configuration</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">GetConnectionString</span><span style="color:#f8f8f2;">(</span><span style="color:#f1fa8c;">&quot;DefaultConnection&quot;</span><span style="color:#f8f8f2;">);
+</span><span style="color:#ffffff;">services</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">AddDbContext</span><span style="color:#f8f8f2;">&lt;</span><span style="font-style:italic;color:#66d9ef;">DemoDbContext</span><span style="color:#f8f8f2;">&gt;(</span><span style="font-style:italic;color:#ffb86c;">opt </span><span style="font-style:italic;color:#8be9fd;">=&gt; </span><span style="color:#ffffff;">opt</span><span style="color:#ff79c6;">.</span><span style="color:#50fa7b;">UseSqlServer</span><span style="color:#f8f8f2;">(</span><span style="color:#ffffff;">connectionString</span><span style="color:#f8f8f2;">));
+</span></code></pre>
+<p>Now we're pulling the database connection string from the <code>appsettings.json</code> file.
+In a real environment, you might have different modes of operation (development, staging, production) where you'd want to specify different database connections.</p>
+<h2 id="docker">Docker</h2>
+<p>In the previous step, we specified a SQL Express database connection. As we add more architectural components and services to our project, it becomes more complicated to deploy or on-board for new developers. <a href="https://docs.docker.com/">Docker</a> solves this problem.</p>
+<h4 id="virtues-in-a-nutshell">Virtues in a Nutshell</h4>
+<ol>
+<li>Docker enables efficient use of system resources.</li>
+<li>Docker enables faster software delivery cycles.</li>
+<li>Docker enables application portability.</li>
+</ol>
+<p>Let's start by creating a <code>Dockerfile</code> in the parent directory of <code>CSharpRESTDemo</code>.</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ff79c6;">FROM</span><span style="color:#f8f8f2;"> mcr.microsoft.com/dotnet/core/sdk:3.1 </span><span style="color:#ff79c6;">AS </span><span style="color:#f8f8f2;">build
+</span><span style="color:#ff79c6;">WORKDIR </span><span style="color:#f8f8f2;">/app
+
+</span><span style="color:#6272a4;"># Copy .csproj and restore as distinct layers.
+</span><span style="color:#ff79c6;">COPY</span><span style="color:#f8f8f2;"> CSharpRESTDemo/*.csproj ./CSharpRESTDemo/
+</span><span style="color:#6272a4;"># Restore dependencies specified in .csproj
+</span><span style="color:#ff79c6;">RUN </span><span style="color:#f8f8f2;">dotnet restore CSharpRESTDemo
+</span><span style="color:#6272a4;"># Install the dotnet-ef tool.
+</span><span style="color:#ff79c6;">RUN </span><span style="color:#f8f8f2;">dotnet tool install --global dotnet-ef
+
+</span><span style="color:#6272a4;"># Copy everything else and build app.
+</span><span style="color:#ff79c6;">COPY</span><span style="color:#f8f8f2;"> CSharpRESTDemo/. ./CSharpRESTDemo/
+</span><span style="color:#ff79c6;">COPY</span><span style="color:#f8f8f2;"> ./start.sh ./CSharpRESTDemo/
+</span><span style="color:#ff79c6;">WORKDIR </span><span style="color:#f8f8f2;">/app/CSharpRESTDemo
+</span><span style="color:#ff79c6;">RUN </span><span style="color:#f8f8f2;">chmod +x ./start.sh
+
+</span><span style="color:#6272a4;"># Execute script when container runs.
+</span><span style="color:#ff79c6;">CMD </span><span style="color:#f8f8f2;">/bin/bash ./start.sh
+</span></code></pre>
+<ul>
+<li><code>start.sh</code> does not exist yet, we'll get to that in the next step.</li>
+</ul>
+<p>In this code snippet, we're using a microsoft image with correct dotnet version installed.
+We copy over the <code>CSharpRESTDemo.csproj</code> file, and install the dependencies specified. We also install the
+<code>dotnet-ef</code> tool so we can use the <strong>EntityFramework</strong> commands.</p>
+<p>Next, we'll copy over the <code>CSharpRESTDemo</code> contents into the container.
+Then, copying over the <code>start.sh</code> and mark it as executable. We'll use this to start up our application.</p>
+<hr />
+<p>Now we'll create a new file called <code>start.sh</code>, it should be in the parent directory of <code>CSharpRESTDemo</code> with the <code>Dockerfile</code>.
+It should have the following contents:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ffffff;">PATH</span><span style="color:#ff79c6;">=</span><span style="color:#f1fa8c;">&quot;$</span><span style="color:#ffffff;">PATH</span><span style="color:#f1fa8c;">:$</span><span style="color:#ffffff;">HOME</span><span style="color:#f1fa8c;">/.dotnet/tools/&quot;
+
+</span><span style="color:#8be9fd;">set </span><span style="font-style:italic;color:#ffb86c;">-e
+
+</span><span style="color:#ff79c6;">until </span><span style="color:#50fa7b;">dotnet</span><span style="color:#f8f8f2;"> ef database update</span><span style="color:#ff79c6;">; do
+&gt;&amp;</span><span style="color:#bd93f9;">2 </span><span style="color:#8be9fd;">echo </span><span style="color:#f1fa8c;">&quot;SQL Server is starting up&quot;
+</span><span style="color:#50fa7b;">sleep</span><span style="color:#f8f8f2;"> 1
+</span><span style="color:#ff79c6;">done
+
+&gt;&amp;</span><span style="color:#bd93f9;">2 </span><span style="color:#8be9fd;">echo </span><span style="color:#f1fa8c;">&quot;SQL Server is up - executing command&quot;
+</span><span style="color:#8be9fd;">exec</span><span style="color:#f8f8f2;"> dotnet run
+</span></code></pre>
+<p>This script will attempt to perform database migrations (if needed) and run the application.</p>
+<hr />
+<p>The next step will allow us to compose our service components. Create a file in the parent drectory of <code>CSharpRESTDemo</code> called <code>docker-compose.yml</code>, it should have the following contents:</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#ff79c6;">version</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;3&quot;
+</span><span style="color:#ff79c6;">services</span><span style="color:#f8f8f2;">:
+  </span><span style="color:#ff79c6;">api</span><span style="color:#f8f8f2;">:
+    </span><span style="color:#ff79c6;">build</span><span style="color:#f8f8f2;">: </span><span style="color:#bd93f9;">.
+    </span><span style="color:#ff79c6;">ports</span><span style="color:#f8f8f2;">:
+      - </span><span style="color:#f1fa8c;">&quot;5000:5000&quot;
+      </span><span style="color:#f8f8f2;">- </span><span style="color:#f1fa8c;">&quot;5001:5001&quot;
+    </span><span style="color:#ff79c6;">environment</span><span style="color:#f8f8f2;">:
+      </span><span style="color:#ff79c6;">ASPNETCORE_URLS</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;http://0.0.0.0:5000;https://0.0.0.0:5001&quot;
+  </span><span style="color:#ff79c6;">db</span><span style="color:#f8f8f2;">:
+    </span><span style="color:#ff79c6;">image</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;mcr.microsoft.com/mssql/server:latest&quot;
+    </span><span style="color:#ff79c6;">environment</span><span style="color:#f8f8f2;">:
+      </span><span style="color:#ff79c6;">SA_PASSWORD</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;CHANGEME123!&quot;
+      </span><span style="color:#ff79c6;">ACCEPT_EULA</span><span style="color:#f8f8f2;">: </span><span style="color:#f1fa8c;">&quot;Y&quot;
+</span></code></pre>
+<p>In this file, we have <em>two</em> services, <code>api</code> and <code>db</code>.</p>
+<p>Looking at <code>api</code>, we tell it to build the <code>Dockerfile</code> we created earlier and
+make the port range <code>5000</code>-<code>5001</code> accessible to the host. We also specify an environment variable to tell the application runtime
+that we want <code>kestrel</code> to bind to the ports we specified.</p>
+<p>The <code>db</code> service will use a <em>ready-to-go</em> <a href="https://hub.docker.com/_/microsoft-mssql-server">Microsoft SQL Server</a>. We only need to specify <code>SA_PASSWORD</code> and <code>ACCEPT_EULA</code>. Note that
+these are the same credentials we specified in the <code>appsettings.json</code> file earlier.</p>
+<hr />
+<p>Now you should be able to run <code>docker-compose up</code> and access the API on <code>http://localhost:5000</code>!</p>
+<p>Check out the <strong>Part Three</strong> for more!</p>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Zackary Troop
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/ztroop/dracula-zen">Dracula Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>
