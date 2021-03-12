@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        
+
+        <title></title>
+
+        
+            <link rel="stylesheet" href="https://trooploop.ca/theme.css">
+        
+        
+    </head>
+    <body>
+        <div class="content">
+        
+        
+            <header>
+                <div class="header-left">
+                    <a href="https:&#x2F;&#x2F;trooploop.ca" class="logo"></a>
+                </div>
+                <div class="header-right">
+                    <nav itemscope itemtype="http://schema.org/SiteNavigationElement">
+                        
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/notes/">
+                                    <span itemprop="name">Notes</span>
+                                </a>
+                            </li>
+                        
+                            
+                            <li class="nav">
+                                <a itemprop="url" href="https://trooploop.ca/about/">
+                                    <span itemprop="name">About</span>
+                                </a>
+                            </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://github.com/ztroop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/github.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                        
+                        <li class="nav">
+                            <a itemprop="url" href="https://twitter.com/ztroopaloop">
+                                <img class="icon" src="https:&#x2F;&#x2F;trooploop.ca/icons/twitter.svg" alt="Github">
+                            </a>
+                        </li>
+                        
+                    </nav>
+                </div>
+            </header>
+        
+        
+        <main>
+            
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <div itemprop="headline">
+        <h1>Ruby Gem Installation Issues in MacOS</h1>
+        <div class="border"></div>
+        <time datetime="2021-04-09" class="date" itemprop="datePublished">
+            09 Apr 2021
+        </time>
+    </div>
+    <div itemprop="articleBody">
+        <p>My day job requires me to use a MacOS laptop for work. I encountered a puzzling issue when I was updating the <a href="https://github.com/brianmario/yajl-ruby">yajl-ruby</a> gem.</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#50fa7b;">current</span><span style="color:#f8f8f2;"> directory: /Library/Ruby/Gems/2.6.0/gems/yajl-ruby-1.4.1/ext/yajl
+</span><span style="color:#50fa7b;">/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby</span><span style="font-style:italic;color:#ffb86c;"> -I</span><span style="color:#f8f8f2;"> /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0</span><span style="font-style:italic;color:#ffb86c;"> -r</span><span style="color:#f8f8f2;"> ./siteconf20210310-23807-1oknzj5.rb extconf.rb
+
+</span><span style="color:#50fa7b;">creating</span><span style="color:#f8f8f2;"> Makefile
+</span><span style="color:#50fa7b;">current</span><span style="color:#f8f8f2;"> directory: /Library/Ruby/Gems/2.6.0/gems/yajl-ruby-1.4.1/ext/yajl
+</span><span style="color:#50fa7b;">make </span><span style="color:#f1fa8c;">&quot;DESTDIR=&quot;</span><span style="color:#f8f8f2;"> clean
+</span><span style="color:#50fa7b;">current</span><span style="color:#f8f8f2;"> directory: /Library/Ruby/Gems/2.6.0/gems/yajl-ruby-1.4.1/ext/yajl
+</span><span style="color:#50fa7b;">make </span><span style="color:#f1fa8c;">&quot;DESTDIR=&quot;
+</span><span style="color:#50fa7b;">make: </span><span style="color:#ff79c6;">***</span><span style="color:#f8f8f2;"> No rule to make target `</span><span style="color:#50fa7b;">/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/universal-darwin19/ruby/config.h</span><span style="color:#f1fa8c;">&#39;, needed by `yajl.o&#39;</span><span style="color:#50fa7b;">.</span><span style="color:#f8f8f2;">  Stop.
+</span><span style="color:#50fa7b;">make</span><span style="color:#f8f8f2;"> failed, exit code 2
+</span></code></pre>
+<p>If you're also using a MacOS and Ruby from Xcode Command-Line Tools, you might be interested in the solution. It looks like <code>universal-darwin19</code> doesn't exist, but <code>universal-darwin20</code> does.</p>
+<p>Instead of spending too much time in the Apple melodrama, I simply created a symlink to point to the <code>universal-darwin20</code> directory. Re-run the <code>gem update</code> and we're good to go.</p>
+<pre style="background-color:#282a36;">
+<code><span style="color:#8be9fd;">cd</span><span style="color:#f8f8f2;"> /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/
+</span><span style="color:#50fa7b;">ln</span><span style="font-style:italic;color:#ffb86c;"> -sf</span><span style="color:#f8f8f2;"> universal-darwin20 universal-darwin19
+</span></code></pre>
+<p>It would seem I'm not the only one running into this <a href="https://stackoverflow.com/questions/63729369/commonmarker-gem-cannot-be-installed-needed-for-jekyll-macos">problem</a>.</p>
+
+    </div>
+</article>
+
+        </main>
+        
+        <footer>
+            
+            <div class="border"></div>
+            <div class="footer">
+                <small class="footer-left">
+                    Copyright &copy; Zackary Troop
+                </small>
+                <small class="footer-right">
+                    Powered by <a href="https://www.getzola.org">Zola</a> | Theme <a href="https://github.com/ztroop/dracula-zen">Dracula Zen</a>
+                </small>
+            </div>
+        
+        </footer>
+    
+        </div>
+    </body>
+</html>
