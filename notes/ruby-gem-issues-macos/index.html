@@ -83,7 +83,7 @@
 </span><span style="color:#50fa7b;">make: </span><span style="color:#ff79c6;">***</span><span style="color:#f8f8f2;"> No rule to make target `</span><span style="color:#50fa7b;">/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/universal-darwin19/ruby/config.h</span><span style="color:#f1fa8c;">&#39;, needed by `yajl.o&#39;</span><span style="color:#50fa7b;">.</span><span style="color:#f8f8f2;">  Stop.
 </span><span style="color:#50fa7b;">make</span><span style="color:#f8f8f2;"> failed, exit code 2
 </span></code></pre>
-<p>If you're also using a MacOS and Ruby from Xcode Command-Line Tools, you might be interested in the solution. It looks like <code>universal-darwin19</code> doesn't exist, but <code>universal-darwin20</code> does.</p>
+<p>If you're also using MacOS and Ruby from Xcode Command-Line Tools, you might be interested in the solution. It looks like <code>universal-darwin19</code> doesn't exist, but <code>universal-darwin20</code> does.</p>
 <p>Instead of spending too much time in the Apple melodrama, I simply created a symlink to point to the <code>universal-darwin20</code> directory. Re-run the <code>gem update</code> and we're good to go.</p>
 <pre style="background-color:#282a36;">
 <code><span style="color:#8be9fd;">cd</span><span style="color:#f8f8f2;"> /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/include/ruby-2.6.0/
