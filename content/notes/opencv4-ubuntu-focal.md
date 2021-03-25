@@ -1,7 +1,7 @@
 +++
 title = "OpenCV4 in Ubuntu Focal 20.04"
 slug = "opencv4-ubuntu-focal"
-date = 2021-04-10
+date = 2021-03-10
 +++
 
 The `opencv` version available in Ubuntu 20.04 is too old! We need a newer version!

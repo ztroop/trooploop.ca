@@ -10,11 +10,11 @@ I worked for a company in the past that had a very strict leadership hierarchy. 
 
 I was in a computer security role, but often given programming tasks to complete. At the time, I thought it was a bit odd that my output was intentionally hushed from meetings. 🙊🙈
 
-✨ A note for the reader. ✨ If you're ever working on tasks that are strategically obscured or omitted from other departments. That should raise a big ol' red flag.
+✨ A note for the reader. ✨ If you're ever working on tasks that are strategically obscured or omitted from other departments. It should raise a big ol' red flag.
 
 ## Conversation
 
-Fast forward, one day in the lunch room, I asked the VP of Engineering if he knew who I could speak to about the "Software XYZ" API. It was a pleasant interaction and he could tell I was very interested in software development practices. Robert Martin's Clean Code was enthusiastically discussed in the process.
+Fast forward. One day in the lunch room, I asked the VP of Engineering if he knew who I could speak to about the "Software XYZ" API. It was a pleasant interaction and he could tell I was very interested in software development practices. Robert Martin's Clean Code was enthusiastically discussed in the process.
 
 A day later I was called into a tiny meeting room with my managers.
 

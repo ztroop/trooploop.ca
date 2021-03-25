@@ -38,17 +38,17 @@ Here's a fictitious example:
 
 Beyond the technical issue, there's another problem. A lack of robustness allowed this scenario to happen as it did. A possible solution could have involved disabling the problematic feature temporarily while your staff is taking time off.
 
-In the _acknowledgement_, the staff that sacrificed their time were attributed as "Heroes". They "Stepped Up".
+In the _acknowledgement_, the staff that sacrificed their time were labelled as "Heroes". They "Stepped Up".
 
 This is dangerous for two reasons.
 
-1. Encourages others to become "Heroes" as well.
+1. Encourages others to become "Heroes" as well. It _sounds_ positive.
 2. Promotes the idea that only employees that sacrifice their time and well-being will be acknowledged for their work.
 
-Everyone has different commitments in life. Married, kids, health issues and more. It's not okay to assume everyone has the time to sacrifice in the first place.
+Everyone has different commitments in life. Married, kids, health issues and more. It's not okay to assume everyone time to sacrifice.
 
 ## Burning Out
 
-I've burned out. A couple of times. Despite all the reading and reflecting, it will probably happen again. Heck, even the [Healthy Software Developer](https://www.youtube.com/watch?v=Ie6sSZQkUTM) is taking a hiatus. No one is immune to it.
+I've burned out in the past. A couple of times. Despite all the reading and reflecting, it will probably happen again. Heck, even the [Healthy Software Developer](https://www.youtube.com/watch?v=Ie6sSZQkUTM) is taking a hiatus. No one is immune to it.
 
 You matter. Take care of yourself.

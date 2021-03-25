@@ -1,7 +1,7 @@
 +++
 title = "Ruby Gem Installation Issues in MacOS"
 slug = "ruby-gem-issues-macos"
-date = 2021-04-09
+date = 2021-03-09
 +++
 
 My day job requires me to use a MacOS laptop for work. I encountered a puzzling issue when I was updating the [yajl-ruby](https://github.com/brianmario/yajl-ruby) gem.
