@@ -4,7 +4,7 @@ slug = "leadership-hierarchy"
 date = 2021-03-24
 +++
 
-I worked for a company in the past that had a very strict leadership hierarchy. Before we dig into that, let's get some context first.
+I worked for a company in the past that had a very strict sense of leadership hierarchy. Before we dig into that, let's get some context first.
 
 ## Background Context
 

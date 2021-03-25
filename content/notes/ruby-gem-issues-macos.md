@@ -19,7 +19,7 @@ make: *** No rule to make target `/Library/Developer/CommandLineTools/SDKs/MacOS
 make failed, exit code 2
 ```
 
-If you're also using a MacOS and Ruby from Xcode Command-Line Tools, you might be interested in the solution. It looks like `universal-darwin19` doesn't exist, but `universal-darwin20` does.
+If you're also using MacOS and Ruby from Xcode Command-Line Tools, you might be interested in the solution. It looks like `universal-darwin19` doesn't exist, but `universal-darwin20` does.
 
 Instead of spending too much time in the Apple melodrama, I simply created a symlink to point to the `universal-darwin20` directory. Re-run the `gem update` and we're good to go.
 

@@ -26,7 +26,7 @@ Work will carry on with or without you. If you're not there, someone else will r
 
 ## Glamorizing Overworking
 
-When I saw [@KatyLeeson](https://twitter.com/KatyLeeson)'s post on overworking, I knew I had to write this.
+When I saw [@KatyLeeson](https://twitter.com/KatyLeeson)'s post on overworking, I knew I had to write about this.
 
 > We NEED to stop glamorizing overworking. The absence of sleep, good diet, exercise, relaxation, and time with friends and family isn't something to be applauded.
 
@@ -45,10 +45,10 @@ This is dangerous for two reasons.
 1. Encourages others to become "Heroes" as well. It _sounds_ positive.
 2. Promotes the idea that only employees that sacrifice their time and well-being will be acknowledged for their work.
 
-Everyone has different commitments in life. Married, kids, health issues and more. It's not okay to assume everyone time to sacrifice.
+Everyone has different commitments in life. Married, kids, health issues and more. It's not okay to assume everyone has time to sacrifice.
 
 ## Burning Out
 
-I've burned out in the past. A couple of times. Despite all the reading and reflecting, it will probably happen again. Heck, even the [Healthy Software Developer](https://www.youtube.com/watch?v=Ie6sSZQkUTM) is taking a hiatus. No one is immune to it.
+I've burned out in the past. A couple of times. Despite all the reading and reflecting, it will probably happen again. Heck, even the [Healthy Software Developer](https://www.youtube.com/watch?v=Ie6sSZQkUTM) is taking a hiatus. No one is immune to the stressors.
 
 You matter. Take care of yourself.
